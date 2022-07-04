@@ -43,14 +43,13 @@ describe('News app', () => {
 
   describe("4. GET /api/articles/:article_id", () => {
     it("check the properties of an article object", () => {
-      let ARTICLE_ID = 2;
+      // let ARTICLE_ID = 2;
       return request(app)
-        .get(`/api/articles/${ARTICLE_ID}`)
+        .get(`/api/articles/2`)
         .expect(200)
         .then(({body:{ article }}) => {
           expect(article).toHaveProperty("author");
           expect(article).toHaveProperty("title");
-          expect(article).toHaveProperty("article_id");
           expect(article).toHaveProperty("body");
           expect(article).toHaveProperty("topic");
           expect(article).toHaveProperty("created_at");
@@ -58,14 +57,15 @@ describe('News app', () => {
         });
     });
 
-    // it("400: bad request response for invalid path", () => {
-    //     return request(app)
-    //     .get(`/api/articles/potato`)
-    //     .expect(400)
-    //     .then(({ body: { msg } }) => {
-    //         expect(msg).toBe("Invalid path");
-    //     });
-    // });
+    it("400: bad request response for invalid path", () => {
+        return request(app)
+        .get('/api/articles/notAnID')
+        .expect(400)
+        .then(({ body}) => {
+            expect(body.msg).toBe("Invalid input");
+        });
+    });
+   
   });
 
 

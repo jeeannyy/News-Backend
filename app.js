@@ -14,15 +14,12 @@ app.use("*", (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-    if (typeof err === "string") {
-      res.status(400).send({ msg: err });
-    } else next(err);
+  res.status(400).send({ msg: "Invalid input" });
   });
   
-  app.use((err, req, res, next) => {
-    console.log(err);
-    res.status(500).send({ msg: "Server Error" });
+app.use((err, req, res, next) => {
+  res.status(500).send({ msg: "Server Error" });
   });
 
   
-  module.exports = app;
+module.exports = app;
