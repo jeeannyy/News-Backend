@@ -43,9 +43,9 @@ describe('News app', () => {
 
   describe("4. GET /api/articles/:article_id", () => {
     it("check the properties of an article object", () => {
-      let ARTICLE_ID = 2;
+      // let ARTICLE_ID = 2;
       return request(app)
-        .get(`/api/articles/${ARTICLE_ID}`)
+        .get('/api/articles/2')
         .expect(200)
         .then(({body:{ article }}) => {
           expect(article).toHaveProperty("author");
@@ -56,13 +56,14 @@ describe('News app', () => {
           expect(article).toHaveProperty("created_at");
           expect(article).toHaveProperty("votes");
           expect(article.article_id).toEqual(2);
+          
         });
     });
   });
 
 
   describe("5. PATCH /api/articles/:article_id", () => {
-    it("cstatus:200, responds with the updated article", () => {
+    it("status:200, responds with the updated article", () => {
       let articleUpdates = {
         title: "Living in the shadow of a great man",
         topic: "mitch",
@@ -72,12 +73,13 @@ describe('News app', () => {
         votes: 100,
       };
       let newVote = 1;
+      let ARTICLE_ID = 2;
+
       return request(app)
-        .get(`/api/articles/2`)
+        .get(`/api/articles/${ARTICLE_ID}`)
         .expect(200)
         .then(({body:{ article }}) => {
-          expect(article.votes).toEqual(1);
-          console.log(article);
+          expect(articleUpdates.votes).toEqual(101);
         });
     });
     // it("check the vote by passed newVote", () => {
