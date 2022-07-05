@@ -55,19 +55,53 @@ describe('News app', () => {
           expect(article).toHaveProperty("topic");
           expect(article).toHaveProperty("created_at");
           expect(article).toHaveProperty("votes");
+          expect(article.article_id).toEqual(2);
         });
     });
+  });
 
-    // it("400: bad request response for invalid path", () => {
-    //     return request(app)
-    //     .get(`/api/articles/potato`)
-    //     .expect(400)
-    //     .then(({ body: { msg } }) => {
-    //         expect(msg).toBe("Invalid path");
+
+  describe("5. PATCH /api/articles/:article_id", () => {
+    it("cstatus:200, responds with the updated article", () => {
+      let articleUpdates = {
+        title: "Living in the shadow of a great man",
+        topic: "mitch",
+        author: "butter_bridge",
+        body: "I find this existence challenging",
+        created_at: 1594329060000,
+        votes: 100,
+      };
+      let newVote = 1;
+      return request(app)
+        .get(`/api/articles/2`)
+        .expect(200)
+        .then(({body:{ article }}) => {
+          expect(article.votes).toEqual(1);
+          console.log(article);
+        });
+    });
+    // it("check the vote by passed newVote", () => {
+    //   let newVote = 1;
+    //   let testObj = { inc_votes: newVote };
+    //   return request(app)
+    //     .get(`/api/articles/2`)
+    //     .expect(200)
+    //     .then(({body:{ article }}) => {
+    //       expect(article.votes).toEqual(1);
+    //       console.log(article);
+    //     });
+    // });
+    // it("check the vote by passed newVote", () => {
+    //   let newVote = -100;
+    //   let testObj = { inc_votes: newVote };
+    //   return request(app)
+    //     .get(`/api/articles/1`)
+    //     .expect(200)
+    //     .then(({body:{ article }}) => {
+    //       expect(article.votes).toEqual(0);
     //     });
     // });
   });
-
 
 
 
