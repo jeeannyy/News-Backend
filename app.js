@@ -1,26 +1,32 @@
 const express = require("express");
-const { getTopics } = require("./controllers/controller");
+const { getTopics, getArticleById } = require("./controllers/controller");
 
 const app = express();
 
 app.get('/api/topics', getTopics);
 
+app.get('/api/articles/:article_id', getArticleById);
+
 app.use(express.json());
 
 app.use("*", (req, res) => {
-  res.status(404).send({ msg: "Invalid Path" });
+  res.status(404).send({ msg: "Page not found" });
 });
 
 app.use((err, req, res, next) => {
-    if (typeof err === "string") {
-      res.status(400).send({ msg: err });
-    } else next(err);
-  });
-  
-  app.use((err, req, res, next) => {
-    console.log(err);
-    res.status(500).send({ msg: "Server Error" });
-  });
+  if (err.status && err.msg) {
+    res.status(err.status).send({ msg: err.msg });
+  } else next(err);
+});
 
+app.use((err, req, res, next) => {
+  if (err.code === '22P02') {
+    res.status(400).send({ msg: 'Invalid input' });
+  } else next(err);
+});
+
+app.use((err, req, res, next) => {
+  res.status(500).send({ msg: "Server Error" });
+  });
   
-  module.exports = app;
+module.exports = app;
