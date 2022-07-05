@@ -34,7 +34,7 @@ describe('News app', () => {
         .get("/api/topicss")
         .expect(404)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("Invalid Path");
+          expect(msg).toBe('Page not found');
         });
     });
   });
@@ -70,7 +70,7 @@ describe('News app', () => {
       .get('/api/articles/99999')
       .expect(404)
       .then(({ body }) => {
-          expect(body.msg).toBe("No article found with article ID: 99999");
+          expect(body.msg).toBe('Page not found');
       });
   });
    
