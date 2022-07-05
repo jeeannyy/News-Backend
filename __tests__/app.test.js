@@ -61,7 +61,7 @@ describe('News app', () => {
         return request(app)
         .get('/api/articles/notAnID')
         .expect(400)
-        .then(({ body}) => {
+        .then(({ body }) => {
             expect(body.msg).toBe("Invalid input");
         });
     });
