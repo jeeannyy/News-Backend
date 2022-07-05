@@ -52,7 +52,8 @@ describe('News app', () => {
           expect(article).toHaveProperty("topic");
           expect(article).toHaveProperty("created_at");
           expect(article).toHaveProperty("votes");
-          expect(ARTICLE_ID).toEqual(2);
+          expect(article).toHaveProperty("article_id");
+          expect(article.article_id).toEqual(2);
         });
     });
 
