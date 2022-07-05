@@ -25,7 +25,4 @@ exports.selectArticleById = (article_id) => {
     }
     return article;
   })
-  .catch((err) => {
-    return Promise.reject(err);
-  });
 };

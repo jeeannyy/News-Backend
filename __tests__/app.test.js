@@ -41,9 +41,9 @@ describe('News app', () => {
 
   describe("4. GET /api/articles/:article_id", () => {
     it("check the properties of an article object", () => {
-      // let ARTICLE_ID = 2;
+      let ARTICLE_ID = 2;
       return request(app)
-        .get(`/api/articles/2`)
+        .get(`/api/articles/${ARTICLE_ID}`)
         .expect(200)
         .then(({body:{ article }}) => {
           expect(article).toHaveProperty("author");
@@ -52,7 +52,7 @@ describe('News app', () => {
           expect(article).toHaveProperty("topic");
           expect(article).toHaveProperty("created_at");
           expect(article).toHaveProperty("votes");
-          expect(article).toHaveProperty("article_id");
+          expect(ARTICLE_ID).toEqual(2);
         });
     });
 
