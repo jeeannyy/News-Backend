@@ -28,6 +28,5 @@ app.use((err, req, res, next) => {
 app.use((err, req, res, next) => {
   res.status(500).send({ msg: "Server Error" });
   });
-
   
 module.exports = app;

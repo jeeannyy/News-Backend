@@ -14,15 +14,17 @@ afterAll(() => {
 
 
 describe('News app', () => {
-   describe('3.Get/api/topics', () => {
+  describe('3.Get/api/topics', () => {
     it('200: return all topics', () => {
       return request(app)
       .get('/api/topics')
       .expect(200)
       .then(({ body: { topics } }) => {
+        expect(topics).toHaveLength(3);
         topics.forEach((topic) => {
           expect(topic).toHaveProperty("description");
           expect(topic).toHaveProperty("slug");
+          
         });
       });
    }); 

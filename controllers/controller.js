@@ -8,6 +8,7 @@ exports.getTopics = (req, res, next) => {
       .catch((err) => next(err));
 };
 
+
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
 
@@ -17,3 +18,4 @@ exports.getArticleById = (req, res, next) => {
   })
   .catch((err) => next(err));
 };
+
