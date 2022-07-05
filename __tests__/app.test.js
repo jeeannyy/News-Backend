@@ -39,8 +39,6 @@ describe('News app', () => {
     });
   });
 
-
-
   describe("4. GET /api/articles/:article_id", () => {
     it("check the properties of an article object", () => {
       // let ARTICLE_ID = 2;
@@ -54,6 +52,7 @@ describe('News app', () => {
           expect(article).toHaveProperty("topic");
           expect(article).toHaveProperty("created_at");
           expect(article).toHaveProperty("votes");
+          expect(article).toHaveProperty("article_id");
         });
     });
 
@@ -65,6 +64,15 @@ describe('News app', () => {
             expect(body.msg).toBe("Invalid input");
         });
     });
+
+    it("404: bad request response for the vaild ID but the article does not exist in the database", () => {
+      return request(app)
+      .get('/api/articles/99999')
+      .expect(404)
+      .then(({ body }) => {
+          expect(body.msg).toBe("No article found with article ID: 99999");
+      });
+  });
    
   });
 
