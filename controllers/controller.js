@@ -18,10 +18,18 @@ exports.getArticleById = (req, res, next) => {
   .catch((err) => next(err));
 };
 
-exports.patchVoteById = (req, res) => {
+
+exports.patchVoteById = (req, res, next) => {
   const { article_id } = req.params;
-  console.log(body);
-  updateVoteById(req.body, article_id)
-  .then((article) => res.status(200)
-  .send({ article }));
+  const{ inc_votes } = req.body;
+
+  if (!req.body.inc_votes && req.body.inc_votes !==0) {
+    next({msg: 'Invalid input'});
+  } else{
+    updateVoteById(article_id, inc_votes)
+      .then((article) => {
+        res.status(200).send({ article });
+      })
+      .catch(next);
+    }
 };

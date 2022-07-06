@@ -4,13 +4,16 @@ const { handleInvalidPaths, handleCustomErrors, handlePSQLErrors, handle500Error
 
 
 const app = express();
+app.use(express.json());
+// should be on top!!!!!!!
+
 
 app.get('/api/topics', getTopics);
 
 app.get('/api/articles/:article_id', getArticleById);
-app.get('/api/articles/:article_id', patchVoteById);
+app.patch('/api/articles/:article_id', patchVoteById);
 
-app.use(express.json());
+
 
 app.use("*", handleInvalidPaths);
 app.use(handleCustomErrors);

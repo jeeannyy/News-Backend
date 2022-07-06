@@ -70,45 +70,38 @@ describe('Testing for News app', () => {
     });
   });
 
-
   describe("5. PATCH /api/articles/:article_id", () => {
-    it("check the vote by passed positive newVote", () => {
+    it("check the vote by passed newVote", () => {
+      const incrementVotes = { inc_votes: 1 };
+
       return request(app)
-        .get('/api/articles/1')
+        .patch('/api/articles/1')
+        .send(incrementVotes)
         .expect(200)
-        .then(({body:{ article }}) => {
-          // console.log(article, "this is article");
-          article.inc_votes = 1;
-          article.votes = article.votes + article.inc_votes;
-          expect(article.votes).toEqual(101);
+        .then(({ body }) => {
+          // console.log(body);
+          expect(body.article).toEqual({
+            title: "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 101,
+            article_id: 1,
+          });
         });
     });
-    it("check the vote by passed negative newVote", () => {
+    it("400: bad request response for invalid path", () => {
+      const incrementVotes = { inc_votes: 99999999 };
+
       return request(app)
-      .get('/api/articles/1')
-      .expect(200)
-      .then(({body:{ article }}) => {
-        article.inc_votes = -1;
-        article.votes = article.votes + article.inc_votes;
-        expect(article.votes).toEqual(99);
-        });
-    });
-    // it("404: bad request response for the vaild ID but the article does not exist in the database", () => {
-    //   let article_id = 1
-    //   // articles[article_id].inc_votes = -999999;
-    //   // articles[article_id].votes = articles[article_id].votes + articles[article_id].inc_votes;
-    //   return request(app)
-    //   .get(`/api/articles/${article_id}`)
-    //   .expect(200)
-    //   .then(({body:{ article }}) => {
-    //     article.inc_votes = -1;
-    //     article.votes = article.votes + article.inc_votes;
-    //     expect(article.votes).toEqual(99);
-    //     })
-    //   // .expect(400)
-    //   .then(({ body }) => {
-    //     expect(body.msg).toBe('Invalid input');
-    //   });
-    // });
+      .patch('/api/articles/NotID')
+      .send(incrementVotes)
+      .expect(400)
+      .then(({ body }) => {
+          expect(body.msg).toBe("Invalid input");
+      });
+  });
+
   });
 });
