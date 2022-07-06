@@ -80,6 +80,24 @@ describe('News app', () => {
   });
 
 
+ // **FEATURE REQUEST**
+  // An article response object should also now include:
+
+  // -`comment_count` which is the total count of all the comments with this article_id - you should make use of queries to the database in order to achieve this.
+
+  describe("7. GET /api/articles/:article_id (comment count)", () => {
+    it("check an article object has comment_count property", () => {
+      return request(app)
+        .get(`/api/articles/1`)
+        .expect(200)
+        .then(({body:{ article }}) => {
+          expect(article).toHaveProperty("author");
+          expect(article).toHaveProperty("comment count");
+        });
+    });
+
+   
+  });
 
 
 
