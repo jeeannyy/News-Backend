@@ -3,6 +3,7 @@ const testData = require("../db/data/test-data");
 const db = require("../db");
 const request = require("supertest");
 const app = require("../app");
+const users = require('../db/data/test-data/users');
 
 beforeEach(() => {
   return seed(testData);
@@ -14,6 +15,7 @@ afterAll(() => {
 
 
 describe('News app', () => {
+
   describe('3.Get/api/topics', () => {
     it('200: return all topics', () => {
       return request(app)
@@ -24,7 +26,6 @@ describe('News app', () => {
         topics.forEach((topic) => {
           expect(topic).toHaveProperty("description");
           expect(topic).toHaveProperty("slug");
-          
         });
       });
    }); 
@@ -78,6 +79,37 @@ describe('News app', () => {
   });
    
   });
+
+//   Responds with:
+// - an array of objects, each object should have the following property: `username`,`name`, `avatar_url`
+
+describe('6. GET /api/users', () => {
+  
+  test('200: return all users', () => {
+    return request(app)
+    .get('/api/users')
+    .expect(200)
+    .then(({ body: { users } }) => {
+      expect(users).toHaveLength(3);
+      users.forEach((user) => {
+        expect(user).toHaveProperty("username");
+        expect(user).toHaveProperty("name");
+        expect(user).toHaveProperty("avatar_url");
+      });
+    });
+});
+
+  test("404 for invalid paths", () => {
+    return request(app)
+      .get("/api/userss")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe('Page not found');
+        });
+      });
+    });
+
+
 
 
 
