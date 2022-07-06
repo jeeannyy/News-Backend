@@ -37,7 +37,7 @@ describe('Testing for News app', () => {
           });
         });
     });
-    test("400: bad request response for invalid path", () => {
+    test("400: bad request response for invalid ID", () => {
       const incrementVotes = { inc_votes: 99999999 };
 
       return request(app)
@@ -45,7 +45,7 @@ describe('Testing for News app', () => {
       .send(incrementVotes)
       .expect(400)
       .then(({ body }) => {
-          expect(body.msg).toBe("Invalid input");
+          expect(body.msg).toBe("Invalid input"); // invalid path
       });
   });
 
@@ -74,15 +74,15 @@ describe('Testing for News app', () => {
   });
 
 
-  test("404: route that does not exist", () => {
-    const incrementVotes = {inc_votes: -100};
+  test("404: page not found for invalid id", () => {
+    const incrementVotes = {inc_votes: 1};
 
     return request(app)
-    .patch('/api/articless/1')
+    .patch('/api/articles/9999')
     .send(incrementVotes)
     .expect(404)
     .then(({ body }) => {
-      expect(body.msg).toBe('Page not found');
+      expect(body.msg).toBe('Invalid Path');
     });
   });
 

@@ -20,7 +20,7 @@ exports.selectArticleById = (article_id) => {
       if(!article) {
         return Promise.reject({
           status: 404,
-          msg: 'Page not found',
+          msg: 'Invalid Path',
         })
       }
       return article;
@@ -38,7 +38,7 @@ exports.selectArticleById = (article_id) => {
       if(!article){
         return Promise.reject({
           status: 404,
-          msg: `Page not found`
+          msg: `Invalid Path`
         });
       }
       return article;
