@@ -18,7 +18,7 @@ afterAll(() => {
 describe('Testing for News app', () => {
 
   describe("5. PATCH /api/articles/:article_id", () => {
-    it("check the vote by passed newVote", () => {
+    test("check the vote by passed newVote", () => {
       const incrementVotes = { inc_votes: 1 };
 
       return request(app)
@@ -37,7 +37,7 @@ describe('Testing for News app', () => {
           });
         });
     });
-    it("400: bad request response for invalid path", () => {
+    test("400: bad request response for invalid path", () => {
       const incrementVotes = { inc_votes: 99999999 };
 
       return request(app)
@@ -58,6 +58,31 @@ describe('Testing for News app', () => {
     .expect(400)
     .then(({ body }) => {
       expect(body.msg).toBe('Invalid input');
+    });
+  });
+
+  test("400: bad request for string inc_votes", () => {
+    const incrementVotes = {inc_votes: 'potato'};
+
+    return request(app)
+    .patch('/api/articles/1')
+    .send(incrementVotes)
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Invalid input');
+    });
+  });
+
+
+  test("404: route that does not exist", () => {
+    const incrementVotes = {inc_votes: -100};
+
+    return request(app)
+    .patch('/api/articless/1')
+    .send(incrementVotes)
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Page not found');
     });
   });
 
