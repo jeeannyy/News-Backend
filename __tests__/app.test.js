@@ -49,15 +49,15 @@ describe('Testing for News app', () => {
       });
   });
 
-  it("400: bad request for patch body without inc_votes", () => {
-    const incrementVotes = { inc_votes: "null" };
+  test("400: bad request for patch body without inc_votes", () => {
+    const incrementVotes = {};
 
     return request(app)
     .patch('/api/articles/1')
     .send(incrementVotes)
     .expect(400)
     .then(({ body }) => {
-      expect(body.msg).toBe("Invalid input");
+      expect(body.msg).toBe('Invalid input');
     });
 });
 
