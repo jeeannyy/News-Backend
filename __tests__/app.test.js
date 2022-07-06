@@ -76,11 +76,7 @@ describe('News app', () => {
           expect(body.msg).toBe('Page not found');
       });
   });
-   
   });
-
-
-
 
 
 
