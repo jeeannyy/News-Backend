@@ -79,7 +79,6 @@ describe('Testing for News app', () => {
         .send(incrementVotes)
         .expect(200)
         .then(({ body }) => {
-          // console.log(body);
           expect(body.article).toEqual({
             title: "Living in the shadow of a great man",
             topic: "mitch",
@@ -102,6 +101,18 @@ describe('Testing for News app', () => {
           expect(body.msg).toBe("Invalid input");
       });
   });
+
+  it("400: bad request for patch body without inc_votes", () => {
+    const incrementVotes = { inc_votes: "null" };
+
+    return request(app)
+    .patch('/api/articles/1')
+    .send(incrementVotes)
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Invalid input");
+    });
+});
 
   });
 });
