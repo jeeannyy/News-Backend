@@ -61,5 +61,4 @@ describe('Testing for News app', () => {
     });
 });
 
-  });
 });
