@@ -59,6 +59,7 @@ describe('Testing for News app', () => {
     .then(({ body }) => {
       expect(body.msg).toBe('Invalid input');
     });
-});
+  });
 
+});
 });
