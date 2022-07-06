@@ -43,3 +43,14 @@ exports.selectArticleById = (article_id) => {
       return article;
     });
 };
+
+exports.fetchUsers = () => {
+  return db
+      .query(
+        `SELECT * FROM users;`
+      )
+      .then((result) => {
+        console.log(result);
+        return result.rows;
+      })
+}
