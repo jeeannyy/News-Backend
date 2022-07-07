@@ -54,4 +54,4 @@ exports.fetchUsers = () => {
         console.log(result);
         return result.rows;
       })
-}
+} 
