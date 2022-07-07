@@ -130,6 +130,32 @@ describe('Testing for News app', () => {
   });
 
 
+  describe('6. GET /api/users', () => {
+
+    test('200: return all users', () => {
+      return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ body: { users } }) => {
+        expect(users).toHaveLength(3);
+        users.forEach((user) => {
+          expect(user).toHaveProperty("username");
+          expect(user).toHaveProperty("name");
+          expect(user).toHaveProperty("avatar_url");
+        });
+      });
+  });
+  
+    test("404 for invalid paths", () => {
+      return request(app)
+        .get("/api/userss")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe('Page not found');
+          });
+        });
+      });
+
 
  // **FEATURE REQUEST**
   // An article response object should also now include:
@@ -160,54 +186,17 @@ describe('Testing for News app', () => {
           expect(article.comment_count).toEqual(2);
         });
     });
-    it("404: bad request response for the invaild ID", () => {
+    test("404: bad request response for the invaild ID", () => {
       return request(app)
       .get('/api/articles/99999')
       .expect(404)
       .then(({ body }) => {
           expect(body.msg).toBe('Page not found');
       });
-  });
+    });
    
   });
 
-  test("404: page not found for invalid id", () => {
-    const incrementVotes = {inc_votes: 1};
-    return request(app)
-    .patch('/api/articles/9999')
-    .send(incrementVotes)
-    .expect(404)
-    .then(({ body }) => {
-      expect(body.msg).toBe('Invalid Path');
-    });
-  });
-
 });
-
-describe('6. GET /api/users', () => {
-
-  test('200: return all users', () => {
-    return request(app)
-    .get('/api/users')
-    .expect(200)
-    .then(({ body: { users } }) => {
-      expect(users).toHaveLength(3);
-      users.forEach((user) => {
-        expect(user).toHaveProperty("username");
-        expect(user).toHaveProperty("name");
-        expect(user).toHaveProperty("avatar_url");
-      });
-    });
-});
-
-  test("404 for invalid paths", () => {
-    return request(app)
-      .get("/api/userss")
-      .expect(404)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe('Page not found');
-        });
-      });
-    });
 
 });
