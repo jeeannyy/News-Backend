@@ -105,69 +105,98 @@ describe('Testing for News app', () => {
       });
   });
 
-  test("400: bad request for patch body without inc_votes", () => {
-    const incrementVotes = {};
+    test("400: bad request for patch body without inc_votes", () => {
+      const incrementVotes = {};
 
-    return request(app)
-    .patch('/api/articles/1')
-    .send(incrementVotes)
-    .expect(400)
-    .then(({ body }) => {
-      expect(body.msg).toBe('Invalid input');
-    });
-  });
-
-  test("400: bad request for string inc_votes", () => {
-    const incrementVotes = {inc_votes: 'potato'};
-
-    return request(app)
-    .patch('/api/articles/1')
-    .send(incrementVotes)
-    .expect(400)
-    .then(({ body }) => {
-      expect(body.msg).toBe('Invalid input');
-    });
-  });
-
-
-  test("404: page not found for invalid id", () => {
-    const incrementVotes = {inc_votes: 1};
-
-    return request(app)
-    .patch('/api/articles/9999')
-    .send(incrementVotes)
-    .expect(404)
-    .then(({ body }) => {
-      expect(body.msg).toBe('Invalid Path');
-    });
-  });
-
-});
-
-describe('6. GET /api/users', () => {
-
-  test('200: return all users', () => {
-    return request(app)
-    .get('/api/users')
-    .expect(200)
-    .then(({ body: { users } }) => {
-      expect(users).toHaveLength(3);
-      users.forEach((user) => {
-        expect(user).toHaveProperty("username");
-        expect(user).toHaveProperty("name");
-        expect(user).toHaveProperty("avatar_url");
+      return request(app)
+      .patch('/api/articles/1')
+      .send(incrementVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Invalid input');
       });
     });
-});
 
-  test("404 for invalid paths", () => {
-    return request(app)
-      .get("/api/userss")
-      .expect(404)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe('Page not found');
+    test("400: bad request for string inc_votes", () => {
+      const incrementVotes = {inc_votes: 'potato'};
+
+      return request(app)
+      .patch('/api/articles/1')
+      .send(incrementVotes)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Invalid input');
+      });
+  });
+
+
+  describe('6. GET /api/users', () => {
+
+    test('200: return all users', () => {
+      return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ body: { users } }) => {
+        expect(users).toHaveLength(3);
+        users.forEach((user) => {
+          expect(user).toHaveProperty("username");
+          expect(user).toHaveProperty("name");
+          expect(user).toHaveProperty("avatar_url");
         });
       });
+  });
+  
+    test("404 for invalid paths", () => {
+      return request(app)
+        .get("/api/userss")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe('Page not found');
+          });
+        });
+      });
+
+
+ // **FEATURE REQUEST**
+  // An article response object should also now include:
+
+  // -`comment_count` which is the total count of all the comments with this article_id - you should make use of queries to the database in order to achieve this.
+
+  describe("7. GET /api/articles/:article_id (comment count)", () => {
+    test("check an article object has comment_count property", () => {
+      return request(app)
+        .get(`/api/articles/1`)
+        .expect(200)
+        .then(({body:{ article }}) => {
+          expect(article).toHaveProperty("author");
+          expect(article).toHaveProperty("title");
+          expect(article).toHaveProperty("body");
+          expect(article).toHaveProperty("topic");
+          expect(article).toHaveProperty("created_at");
+          expect(article).toHaveProperty("votes");
+          expect(article).toHaveProperty("article_id");
+          expect(article).toHaveProperty("comment_count");
+        });
     });
+    test("check comment count for an specific id", () => {
+      return request(app)
+        .get(`/api/articles/9`)
+        .expect(200)
+        .then(({body:{ article }}) => {
+          expect(article.comment_count).toEqual(2);
+        });
+    });
+    test("404: bad request response for the invaild ID", () => {
+      return request(app)
+      .get('/api/articles/99999')
+      .expect(404)
+      .then(({ body }) => {
+          expect(body.msg).toBe('Page not found');
+      });
+    });
+   
+  });
+
+});
 
 });

@@ -6,6 +6,7 @@ const app = express();
 app.use(express.json());
 // should be on top!!!!!!!
 
+
 app.get('/api/topics', getTopics);
 
 app.get('/api/articles/:article_id', getArticleById);
