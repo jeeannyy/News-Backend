@@ -86,16 +86,37 @@ describe('News app', () => {
   // -`comment_count` which is the total count of all the comments with this article_id - you should make use of queries to the database in order to achieve this.
 
   describe("7. GET /api/articles/:article_id (comment count)", () => {
-    it("check an article object has comment_count property", () => {
+    test("check an article object has comment_count property", () => {
       return request(app)
         .get(`/api/articles/1`)
         .expect(200)
         .then(({body:{ article }}) => {
           expect(article).toHaveProperty("author");
-          expect(article).toHaveProperty("comment count");
+          expect(article).toHaveProperty("title");
+          expect(article).toHaveProperty("body");
+          expect(article).toHaveProperty("topic");
+          expect(article).toHaveProperty("created_at");
+          expect(article).toHaveProperty("votes");
+          expect(article).toHaveProperty("article_id");
+          expect(article).toHaveProperty("comment_count");
         });
     });
-
+    test("check comment count for an specific id", () => {
+      return request(app)
+        .get(`/api/articles/9`)
+        .expect(200)
+        .then(({body:{ article }}) => {
+          expect(article.comment_count).toEqual(2);
+        });
+    });
+    it("404: bad request response for the invaild ID", () => {
+      return request(app)
+      .get('/api/articles/99999')
+      .expect(404)
+      .then(({ body }) => {
+          expect(body.msg).toBe('Page not found');
+      });
+  });
    
   });
 
