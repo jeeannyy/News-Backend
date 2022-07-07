@@ -1,3 +1,5 @@
+const { userData } = require('../db/data/test-data');
+const users = require('../db/data/test-data/users');
 const db = require("../db/index");
 
 exports.fetchTopics = () => {
@@ -8,6 +10,16 @@ exports.fetchTopics = () => {
       .then((result) => {
         return result.rows;
       })
+};
+
+exports.fetchArticles = () => {
+  return db
+    .query(
+      `SELECT * FROM articles ORDER BY articles.created_at DESC;`
+    )
+    .then((result) => {
+      return result.rows;   
+    })
 };
 
 
@@ -21,7 +33,7 @@ exports.selectArticleById = (article_id) => {
     if(!article) {
       return Promise.reject({
         status: 404,
-        msg: 'Page not found',
+        msg: 'Invalid Path',
       })
     }
     return article;
@@ -52,7 +64,25 @@ exports.fetchUsers = () => {
         `SELECT * FROM users;`
       )
       .then((result) => {
-        console.log(result);
         return result.rows;
       })
 } 
+
+exports.fetchUserName = () => {
+  return db
+        .query(
+          `SELECT * FROM users where username = $1`, [username]
+        )
+        .then(({ rows }) => {
+          const userName = rows[0];
+          console.log(rows, "this is use result");
+
+          if(userName.rowCount === 0){
+            return Promise.reject({
+              status: 404,
+              msg: `No username found`
+            })
+          }
+          return userName;
+        })
+}

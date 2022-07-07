@@ -3,7 +3,6 @@ const testData = require("../db/data/test-data");
 const db = require("../db");
 const request = require("supertest");
 const app = require("../app");
-const users = require('../db/data/test-data/users');
 
 beforeEach(() => {
   return seed(testData);
@@ -35,7 +34,7 @@ describe('Testing for News app', () => {
         .get("/api/topicss")
         .expect(404)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe('Page not found');
+          expect(msg).toBe('Invalid Path');
         });
     });
 });
@@ -68,7 +67,7 @@ describe('Testing for News app', () => {
       .get('/api/articles/99999')
       .expect(404)
       .then(({ body }) => {
-          expect(body.msg).toBe('Page not found');
+          expect(body.msg).toBe('Invalid Path');
       });
     });
   });
@@ -137,7 +136,7 @@ describe('Testing for News app', () => {
       .get('/api/users')
       .expect(200)
       .then(({ body: { users } }) => {
-        expect(users).toHaveLength(3);
+        expect(users).toHaveLength(4);
         users.forEach((user) => {
           expect(user).toHaveProperty("username");
           expect(user).toHaveProperty("name");
@@ -151,16 +150,10 @@ describe('Testing for News app', () => {
         .get("/api/userss")
         .expect(404)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe('Page not found');
+          expect(msg).toBe('Invalid Path');
           });
         });
       });
-
-
- // **FEATURE REQUEST**
-  // An article response object should also now include:
-
-  // -`comment_count` which is the total count of all the comments with this article_id - you should make use of queries to the database in order to achieve this.
 
   describe("7. GET /api/articles/:article_id (comment count)", () => {
     test("check an article object has comment_count property", () => {
@@ -191,12 +184,67 @@ describe('Testing for News app', () => {
       .get('/api/articles/99999')
       .expect(404)
       .then(({ body }) => {
-          expect(body.msg).toBe('Page not found');
+          expect(body.msg).toBe('Invalid Path');
       });
     });
    
   });
 
-});
+
+  //Ticket 8
+  describe("8. GET /api/articles", () => {
+    test("200: check an article object has all property", () => {
+      return request(app)
+        .get(`/api/articles`)
+        .expect(200)
+        .then(({body:{ articles }}) => {
+          expect(articles).toHaveLength(12);
+          articles.forEach((article) => {
+            expect(article).toHaveProperty("created_at");
+            expect(article).toHaveProperty("title");
+            expect(article).toHaveProperty("body");
+            expect(article).toHaveProperty("votes");
+            expect(article).toHaveProperty("article_id");
+            expect(article).toHaveProperty("topic");
+            expect(article).toHaveProperty("author");
+          })
+        });
+    });
+    test("200: check comment_count is the total count of all the comments with this article_id", () => {
+      return request(app)
+        .get(`/api/articles/3`)
+        .expect(200)
+        .then(({body:{ article }}) => {
+          expect(article.comment_count).toEqual(2);
+        });
+    });
+
+    test("200: check the username is in the users table", () => { 
+      return request(app)
+        .get(`/api/users`)
+        .expect(200)
+        .then(({ body:{ users } }) => {
+          // console.log(users);
+          users.forEach((user) => {
+            expect(user).toHaveProperty("username");
+          });
+          });
+        });
+    
+        test("200: check articles are sorted by date in descending order", () => {
+          return request(app)
+            .get(`/api/articles`)
+            .expect(200)
+            .then(({ body: { articles } }) => {
+              expect(articles).toBeSortedBy("created_at", { descending: true }
+              );
+            });
+          });    
+    });
+
+    
+   
+  });
+
 
 });
