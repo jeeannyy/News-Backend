@@ -24,19 +24,11 @@ exports.patchVoteById = (req, res, next) => {
   const{ inc_votes } = req.body;
 
   console.log(req.body, "This is req.body");
-  // if (!req.body.hasOwnProperty("inc_votes")) {
-  //   console.log("err");
-  //   return Promise.reject({
-  //     status: 400, 
-  //     msg: 'Invalid input'
-  //   });
-  // } else{
     updateVoteById(article_id, inc_votes)
       .then((article) => {
         res.status(200).send({ article });
       })
       .catch((err) => next(err));
-    // }
 };
 
 exports.getUsers = (req, res, next) => {
