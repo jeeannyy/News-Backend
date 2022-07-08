@@ -18,6 +18,7 @@ app.get('/api/articles/:article_id/comments', getCommentsById);
 
 
 
+
 app.use("*", handleInvalidPaths);
 app.use(handleCustomErrors);
 app.use(handlePSQLErrors);

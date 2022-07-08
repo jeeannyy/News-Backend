@@ -60,22 +60,14 @@ exports.fetchUsers = () => {
 exports.selectCommentsById = (article_id) => {
   return db
   .query(
-    `SELECT comments.*,
-    LEFT JOIN articles ON articles.article_id = comments.article_id 
-    WHERE articles.article_id = $1 
-    GROUP BY comments.article_id;`,
-    [article_id]
+    `SELECT * FROM comments WHERE comments.article_id=$1;`
+    ,[article_id]
   )
-  .then((rows) => {
-    const article = rows[0];
-    if(!article) {
-      return Promise.reject({
-        status: 404,
-        msg: 'Page not found',
-      })
-    }
-    return article;
-  })
-}
+  .then((results) => {
+    console.log(results.rows, "this is result rows");
+    return results.rows;
+  });
+
+};
 
 

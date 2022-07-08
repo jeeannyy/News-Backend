@@ -201,10 +201,9 @@ describe('Testing for News app', () => {
    describe("9. GET /api/articles/:article_id/comments", () => {
     test("check an article object has 5 property", () => {
       return request(app)
-        .get(`/api/articles/1`)
+        .get(`/api/articles/1/comments`)
         .expect(200)
         .then(({body:{ article }}) => {
-          console.log(article);
           expect(article).toHaveProperty("comment_id");
           expect(article).toHaveProperty("votes");
           expect(article).toHaveProperty("created_at");
