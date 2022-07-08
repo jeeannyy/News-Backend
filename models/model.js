@@ -60,7 +60,12 @@ exports.fetchUsers = () => {
 exports.selectCommentsById = (article_id) => {
   return db
   .query(
-    `SELECT comments.*, COUNT(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;`
+    `SELECT body, votes, author, COUNT(comments.article_id)::INT AS comment_count 
+    FROM articles 
+    LEFT JOIN comments ON articles.article_id = comments.article_id 
+    WHERE articles.article_id = $1 
+    GROUP BY articles.article_id;`,
+    [article_id]
   )
   .then((rows) => {
     const article = rows[0];
@@ -73,3 +78,5 @@ exports.selectCommentsById = (article_id) => {
     return article;
   })
 }
+
+

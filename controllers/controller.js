@@ -1,4 +1,4 @@
-const { fetchTopics, selectArticleById, updateVoteById, selectCommentsById } = require("../models/model");
+const { fetchTopics, selectArticleById, updateVoteById, selectCommentsById, fetchUsers } = require("../models/model");
 
 exports.getTopics = (req, res, next) => {
     fetchTopics()

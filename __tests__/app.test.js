@@ -35,7 +35,7 @@ describe('Testing for News app', () => {
         .get("/api/topicss")
         .expect(404)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe('Page not found');
+          expect(msg).toBe('Invalid Path');
         });
     });
 });
@@ -68,7 +68,7 @@ describe('Testing for News app', () => {
       .get('/api/articles/99999')
       .expect(404)
       .then(({ body }) => {
-          expect(body.msg).toBe('Page not found');
+          expect(body.msg).toBe('Invalid Path');
       });
     });
   });
@@ -137,7 +137,7 @@ describe('Testing for News app', () => {
       .get('/api/users')
       .expect(200)
       .then(({ body: { users } }) => {
-        expect(users).toHaveLength(3);
+        expect(users).toHaveLength(4);
         users.forEach((user) => {
           expect(user).toHaveProperty("username");
           expect(user).toHaveProperty("name");
@@ -146,12 +146,12 @@ describe('Testing for News app', () => {
       });
   });
   
-    test("404 for invalid paths", () => {
+    test.only("404 for invalid paths", () => {
       return request(app)
         .get("/api/userss")
         .expect(404)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe('Page not found');
+          expect(msg).toBe('Invalid Path');
           });
         });
       });
@@ -185,6 +185,40 @@ describe('Testing for News app', () => {
         .then(({body:{ article }}) => {
           expect(article.comment_count).toEqual(2);
         });
+    });
+    test("404: bad request response for the invaild ID", () => {
+      return request(app)
+      .get('/api/articles/99999')
+      .expect(404)
+      .then(({ body }) => {
+          expect(body.msg).toBe('Page not found');
+      });
+    });
+   
+  });
+
+// Ticket 9 Starts
+   describe("9. GET /api/articles/:article_id/comments", () => {
+    test("check an article object has 5 property", () => {
+      return request(app)
+        .get(`/api/articles/1`)
+        .expect(200)
+        .then(({body:{ article }}) => {
+          console.log(article);
+          expect(article).toHaveProperty("comment_id");
+          expect(article).toHaveProperty("votes");
+          expect(article).toHaveProperty("created_at");
+          expect(article).toHaveProperty("author");
+          expect(article).toHaveProperty("body");
+        });
+    });
+    it("400: bad request response for invalid path", () => {
+      return request(app)
+      .get('/api/articles/notAnID')
+      .expect(400)
+      .then(({ body }) => {
+          expect(body.msg).toBe("Invalid input");
+      });
     });
     test("404: bad request response for the invaild ID", () => {
       return request(app)
