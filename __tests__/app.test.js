@@ -198,11 +198,11 @@ describe('Testing for News app', () => {
         .get(`/api/articles`)
         .expect(200)
         .then(({body:{ articles }}) => {
+          console.log(articles);
           expect(articles).toHaveLength(12);
           articles.forEach((article) => {
             expect(article).toHaveProperty("created_at");
             expect(article).toHaveProperty("title");
-            expect(article).toHaveProperty("body");
             expect(article).toHaveProperty("votes");
             expect(article).toHaveProperty("article_id");
             expect(article).toHaveProperty("topic");
@@ -219,7 +219,7 @@ describe('Testing for News app', () => {
         });
     });
 
-    test("200: check the username is in the users table", () => { 
+    test("200: check the user has username property", () => { 
       return request(app)
         .get(`/api/users`)
         .expect(200)
