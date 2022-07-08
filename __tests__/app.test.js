@@ -146,7 +146,7 @@ describe('Testing for News app', () => {
       });
   });
   
-    test.only("404 for invalid paths", () => {
+    test("404 for invalid paths", () => {
       return request(app)
         .get("/api/userss")
         .expect(404)
