@@ -144,7 +144,7 @@ describe('Testing for News app', () => {
         });
       });
   });
-  
+
     test("404 for invalid paths", () => {
       return request(app)
         .get("/api/userss")
@@ -207,6 +207,8 @@ describe('Testing for News app', () => {
             expect(article).toHaveProperty("article_id");
             expect(article).toHaveProperty("topic");
             expect(article).toHaveProperty("author");
+            expect(article).toHaveProperty("comment_count");
+
           })
         });
     });
@@ -219,18 +221,6 @@ describe('Testing for News app', () => {
         });
     });
 
-    test("200: check the user has username property", () => { 
-      return request(app)
-        .get(`/api/users`)
-        .expect(200)
-        .then(({ body:{ users } }) => {
-          // console.log(users);
-          users.forEach((user) => {
-            expect(user).toHaveProperty("username");
-          });
-          });
-        });
-    
         test("200: check articles are sorted by date in descending order", () => {
           return request(app)
             .get(`/api/articles`)

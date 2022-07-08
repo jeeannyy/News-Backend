@@ -15,7 +15,12 @@ exports.fetchTopics = () => {
 exports.fetchArticles = () => {
   return db
     .query(
-      `SELECT * FROM articles ORDER BY articles.created_at DESC;`
+      `SELECT author, title, article_id, topic, created_at, votes 
+      FROM articles 
+      COUNT(comments.article_id)::INT AS comment_count FROM comments 
+      JOIN comments 
+      ON articles.article_id = comments.article_id
+      ORDER BY created_at DESC;`
     )
     .then((result) => {
       return result.rows;   
