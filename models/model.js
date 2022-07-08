@@ -1,5 +1,3 @@
-const { userData } = require('../db/data/test-data');
-const users = require('../db/data/test-data/users');
 const db = require("../db/index");
 
 exports.fetchTopics = () => {
@@ -15,11 +13,12 @@ exports.fetchTopics = () => {
 exports.fetchArticles = () => {
   return db
     .query(
-      `SELECT author, title, article_id, topic, created_at, votes 
+      `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, 
+      COUNT(comments.article_id) AS comment_count 
       FROM articles 
-      COUNT(comments.article_id)::INT AS comment_count FROM comments 
-      JOIN comments 
+      LEFT JOIN comments 
       ON articles.article_id = comments.article_id
+      GROUP BY articles.article_id
       ORDER BY created_at DESC;`
     )
     .then((result) => {
