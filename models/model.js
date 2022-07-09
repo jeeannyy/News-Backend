@@ -13,7 +13,16 @@ exports.fetchTopics = () => {
       })
 };
 
-exports.fetchArticles = () => {
+exports.fetchArticles = (sort_by = "created_at", order="asc") => {
+  const validSortOptions = ['title', 'topic', 'author', 'body', 'created_at', 'votes'];
+    if (!validSortOptions.includes(sort_by)) {
+    return Promise.reject(
+      {
+        status: 400,
+        msg: 'Invalid sort_by query',
+      })
+  }
+
   return db
     .query(
       `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, 
@@ -22,7 +31,7 @@ exports.fetchArticles = () => {
       LEFT JOIN comments 
       ON articles.article_id = comments.article_id
       GROUP BY articles.article_id
-      ORDER BY created_at DESC;`
+      ORDER BY ${sort_by} ${order};`
     )
     .then((result) => {
       return result.rows;   

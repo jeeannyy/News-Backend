@@ -327,4 +327,109 @@ describe('Testing for News app', () => {
     //     });
       
     });
+
+
+    //Ticket 11
+// The end point should also accept the following queries:
+
+// - `sort_by`, which sorts the articles by any valid column (defaults to date)
+// - `order`, which can be set to `asc` or `desc` for ascending or descending (defaults to descending)
+// - `topic`, which filters the articles by the topic value specified in the query
+
+    describe("11. GET /api/articles (queries)", () => {
+      test('200: return all articles', () => {
+        return request(app)
+          .get(`/api/articles`)
+          .expect(200)
+          .then(({ body : { articles } }) => {
+            expect(articles).toHaveLength(12);
+            articles.forEach((article) => {
+              // console.log(article, "this is article");
+            expect(article).toHaveProperty('title');
+            expect(article).toHaveProperty('topic');
+            expect(article).toHaveProperty('author');
+            expect(article).toHaveProperty('created_at');           
+            expect(article).toHaveProperty('votes');
+            expect(article).toHaveProperty('article_id');
+            expect(article).toHaveProperty('comment_count');
+           });
+          });
+          });
+        test("200: should be sorted by date", () => {
+            return request(app)
+              .get("/api/articles?sort_by=created_at")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy("created_at");
+              });
+          });
+          test("200: should be sorted by title", () => {
+            return request(app)
+              .get("/api/articles?sort_by=title")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy("title");
+              });
+          });  
+          test("200: should be sorted by topic", () => {
+            return request(app)
+              .get("/api/articles?sort_by=topic")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy("topic");
+              });
+          }); 
+          test("200: should be sorted by author", () => {
+            return request(app)
+              .get("/api/articles?sort_by=author")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy("author");
+              });
+          });                    
+          test("200: should be sorted by votes", () => {
+            return request(app)
+              .get("/api/articles?sort_by=votes")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy("votes");
+              });
+          }); 
+
+          test.only("200: to be ordered desc number", () => {
+            return request(app)
+              .get("/api/articles?order=desc")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy('created_at', {descending: true}
+                );
+              });
+          });
+  
+        test("400: bad request response for invalid path", () => {
+            return request(app)
+            .get('/api/articles/notAnID/comments')
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).toBe("Invalid input");
+            });
+          });
+          test("400: bad request response for invalid sort_by option", () => {
+            return request(app)
+              .get("/api/articles?sort_by=potato")
+              .expect(400)
+              .then(({ body: { msg } }) => {
+                expect(msg).toBe("Invalid sort_by query");
+              });
+          });
+          test("404 for invalid paths", () => {
+            return request(app)
+              .get("/api/articless")
+              .expect(404)
+              .then(({ body: { msg } }) => {
+                expect(msg).toBe("Invalid Path");
+              });
+          });
+        
+      });
   });  
