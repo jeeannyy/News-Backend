@@ -16,6 +16,9 @@ app.patch('/api/articles/:article_id', patchVoteById);
 app.get('/api/users', getUsers);
 app.get('/api/users', getUserName);
 
+app.get('/api/articles/:article_id/comments', getCommentsById);
+
+
 
 
 app.use("*", handleInvalidPaths);

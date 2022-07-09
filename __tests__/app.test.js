@@ -190,6 +190,41 @@ describe('Testing for News app', () => {
    
   });
 
+// Ticket 9 Starts
+   describe("9. GET /api/articles/:article_id/comments", () => {
+    test("check an article object has 5 property", () => {
+      return request(app)
+        .get(`/api/articles/1/comments`)
+        .expect(200)
+        .then(({ body: { articles } } ) => {
+          // expect(articles).toHaveLength(10);
+          articles.forEach((article) => {
+          expect(article).toHaveProperty("comment_id");
+          expect(article).toHaveProperty("votes");
+          expect(article).toHaveProperty("created_at");
+          expect(article).toHaveProperty("author");
+          expect(article).toHaveProperty("body");
+         });
+        });
+    });
+    it("400: bad request response for invalid path", () => {
+      return request(app)
+      .get('/api/articles/notAnID')
+      .expect(400)
+      .then(({ body }) => {
+          expect(body.msg).toBe("Invalid input");
+      });
+    });
+    test("404: bad request response for the invaild ID", () => {
+      return request(app)
+      .get('/api/articles/99999')
+      .expect(404)
+      .then(({ body }) => {
+          expect(body.msg).toBe('Invalid Path');
+      });
+    });
+   
+  });
 
   //Ticket 8
   describe("8. GET /api/articles", () => {
