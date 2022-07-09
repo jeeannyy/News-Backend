@@ -75,21 +75,17 @@ exports.fetchUsers = () => {
       })
 } 
 
-exports.fetchUserName = () => {
-  return db
-        .query(
-          `SELECT * FROM users where username = $1`, [username]
-        )
-        .then(({ rows }) => {
-          const userName = rows[0];
-          console.log(rows, "this is use result");
 
-          if(userName.rowCount === 0){
-            return Promise.reject({
-              status: 404,
-              msg: `No username found`
-            })
-          }
-          return userName;
-        })
-}
+exports.selectCommentsById = (article_id) => {
+  return db
+  .query(
+    `SELECT * FROM comments WHERE comments.article_id=$1;`
+    ,[article_id]
+  )
+  .then((results) => {
+    return results.rows;
+  });
+
+};
+
+

@@ -42,6 +42,10 @@ describe('Testing for News app', () => {
     });
 });
 
+
+
+
+
   describe("4. GET /api/articles/:article_id", () => {
     it("Check the properties of article object", () => {
       return request(app)
@@ -74,6 +78,10 @@ describe('Testing for News app', () => {
       });
     });
   });
+
+
+
+
 
   describe("5. PATCH /api/articles/:article_id", () => {
     test("check the vote by passed newVote", () => {
@@ -129,6 +137,7 @@ describe('Testing for News app', () => {
       .then(({ body }) => {
         expect(body.msg).toBe('Invalid input');
       });
+    });
   });
 
 
@@ -157,6 +166,9 @@ describe('Testing for News app', () => {
           });
         });
       });
+
+
+
 
   describe("7. GET /api/articles/:article_id (comment count)", () => {
     test("check an article object has comment_count property", () => {
@@ -190,9 +202,7 @@ describe('Testing for News app', () => {
           expect(body.msg).toBe('Invalid Path');
       });
     });
-   
   });
-
 
   //Ticket 8
   describe("8. GET /api/articles", () => {
@@ -211,33 +221,64 @@ describe('Testing for News app', () => {
             expect(article).toHaveProperty("topic");
             expect(article).toHaveProperty("author");
             expect(article).toHaveProperty("comment_count");
-
           })
         });
-    });
-    test("200: check comment_count is the total count of all the comments with this article_id", () => {
-      return request(app)
-        .get(`/api/articles/3`)
-        .expect(200)
-        .then(({body:{ article }}) => {
-          expect(article.comment_count).toEqual(2);
-        });
-    });
+      });
+      
+      test("200: check comment_count is the total count of all the comments with this article_id", () => {
+        return request(app)
+          .get(`/api/articles/3`)
+          .expect(200)
+          .then(({body:{ article }}) => {
+            expect(article.comment_count).toEqual(2);
+          });
+      });
 
         test("200: check articles are sorted by date in descending order", () => {
           return request(app)
             .get(`/api/articles`)
             .expect(200)
             .then(({ body: { articles } }) => {
-              expect(articles).toBeSortedBy("created_at", { descending: true }
-              );
+              expect(articles).toBeSortedBy("created_at", { descending: true });
             });
           });    
-    });
+        });
 
-    
-   
-  });
+
+  // Ticket 9 Starts
+  describe("9. GET /api/articles/:article_id/comments", () => {
+    test("check an article object has 5 property", () => {
+      return request(app)
+        .get(`/api/articles/1/comments`)
+        .expect(200)
+        .then(({ body: { articles } } ) => {
+          // expect(articles).toHaveLength(10);
+          articles.forEach((article) => {
+          expect(article).toHaveProperty("comment_id");
+          expect(article).toHaveProperty("votes");
+          expect(article).toHaveProperty("created_at");
+          expect(article).toHaveProperty("author");
+          expect(article).toHaveProperty("body");
+         });
+        });
+    });
+    it("400: bad request response for invalid path", () => {
+      return request(app)
+      .get('/api/articles/notAnID')
+      .expect(400)
+      .then(({ body }) => {
+          expect(body.msg).toBe("Invalid input");
+      });
+    });
+    test("404: bad request response for the invaild ID", () => {
+      return request(app)
+      .get('/api/articles/99999')
+      .expect(404)
+      .then(({ body }) => {
+          expect(body.msg).toBe('Invalid Path');
+      });
+    });
+  });      
 
 
 });
