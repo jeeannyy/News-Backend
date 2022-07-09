@@ -1,9 +1,8 @@
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data");
-const db = require("../db");
+const db = require("../db/connection");
 const request = require("supertest");
 const app = require("../app");
-const users = require('../db/data/test-data/users');
 
 beforeEach(() => {
   return seed(testData);
@@ -191,7 +190,7 @@ describe('Testing for News app', () => {
       .get('/api/articles/99999')
       .expect(404)
       .then(({ body }) => {
-          expect(body.msg).toBe('Page not found');
+          expect(body.msg).toBe('Invalid Path');
       });
     });
    
@@ -203,12 +202,15 @@ describe('Testing for News app', () => {
       return request(app)
         .get(`/api/articles/1/comments`)
         .expect(200)
-        .then(({body:{ article }}) => {
+        .then(({ body: { articles } } ) => {
+          // expect(articles).toHaveLength(10);
+          articles.forEach((article) => {
           expect(article).toHaveProperty("comment_id");
           expect(article).toHaveProperty("votes");
           expect(article).toHaveProperty("created_at");
           expect(article).toHaveProperty("author");
           expect(article).toHaveProperty("body");
+         });
         });
     });
     it("400: bad request response for invalid path", () => {
@@ -224,7 +226,7 @@ describe('Testing for News app', () => {
       .get('/api/articles/99999')
       .expect(404)
       .then(({ body }) => {
-          expect(body.msg).toBe('Page not found');
+          expect(body.msg).toBe('Invalid Path');
       });
     });
    

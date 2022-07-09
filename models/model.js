@@ -1,4 +1,4 @@
-const db = require("../db/index");
+const db = require("../db/connection");
 
 exports.fetchTopics = () => {
     return db
@@ -21,7 +21,7 @@ exports.selectArticleById = (article_id) => {
     if(!article) {
       return Promise.reject({
         status: 404,
-        msg: 'Page not found',
+        msg: 'Invalid Path',
       })
     }
     return article;
@@ -60,11 +60,11 @@ exports.fetchUsers = () => {
 exports.selectCommentsById = (article_id) => {
   return db
   .query(
-    `SELECT * FROM comments WHERE comments.article_id=$1;`
+    `SELECT * FROM comments WHERE article_id=$1;`
     ,[article_id]
   )
   .then((results) => {
-    console.log(results.rows, "this is result rows");
+    // console.log(results.rows, "this is result rows");
     return results.rows;
   });
 

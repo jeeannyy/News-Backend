@@ -39,9 +39,12 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.getCommentsById = (req, res, next) => {
+  const { article_id } = req.params;
+
   selectCommentsById(article_id)
-  .then((article) => {
-    res.status(200).send({ article });
+  .then((articles) => {
+    res.status(200).send({ articles });
+    console.log(articles, "this is article");
   })
   .catch((err) => next(err));
 }
