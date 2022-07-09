@@ -1,4 +1,4 @@
-const { fetchTopics, fetchArticles, selectArticleById, updateVoteById, selectCommentsById, fetchUsers } = require("../models/model");
+const { fetchTopics, fetchArticles, selectArticleById, updateVoteById, selectCommentsById, fetchUsers, insertCommentsById } = require("../models/model");
 
 
 exports.getTopics = (req, res, next) => {
@@ -53,6 +53,17 @@ exports.getCommentsById = (req, res, next) => {
   selectCommentsById(article_id)
   .then((articles) => {
     res.status(200).send({ articles });
+  })
+  .catch((err) => next(err));
+}
+
+
+exports.postCommentsById = (req, res, next) => {
+  const { article_id } = req.params;
+
+  insertCommentsById(article_id)
+  .then((articles) => {
+    res.status(201).send({ articles });
   })
   .catch((err) => next(err));
 }

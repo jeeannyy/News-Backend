@@ -283,6 +283,48 @@ describe('Testing for News app', () => {
    
    
    // Ticket 10 Starts
+//    Request body accepts:
+// - an object with the following properties:
+//   - `username`
+//   - `body`
 
+// Responds with:
+// - the posted comment
 
-});
+   describe("10. POST /api/articles/:article_id/comments", () => {
+    // test('201: responds with newly added to the database', () => {
+    //   const newComment = {
+    //     username: 'Jeeanny',
+    //     body: 'Call me Jeeann',
+    //   };
+    //   return request(app)
+    //     .post(`/api/articles/1/comments`)
+    //     .send(newComment)
+    //     .expect(201)
+    //     .then(({ body } ) => {
+    //       expect(body.article).toEqual({
+    //         article_id: 1,
+    //         ...newComment,
+    //       });
+    //      });
+    //     });
+
+      test("400: bad request response for invalid path", () => {
+          return request(app)
+          .get('/api/articles/notAnID/comments')
+          .expect(400)
+          .then(({ body }) => {
+              expect(body.msg).toBe("Invalid input");
+          });
+        });
+    // test("404: bad request response for the invaild ID", () => {
+    //       return request(app)
+    //       .get('/api/articles/99999/comments')
+    //       .expect(404)
+    //       .then(({ body }) => {
+    //           expect(body.msg).toBe('Invalid Path');
+    //       });
+    //     });
+      
+    });
+  });  

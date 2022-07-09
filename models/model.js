@@ -89,3 +89,20 @@ exports.selectCommentsById = (article_id) => {
 };
 
 
+exports.insertCommentsById = (newComment, article_id) => {
+  const { username, body} = newComment;
+  return db
+  .query(
+    `INSERT INTO comments (username, body) 
+    VALUES($1, $2)
+    WHERE article_id = $3;
+    RETURNING *;`
+    ,[username, body, article_id]
+  )
+  .then(({ rows }) => {
+    console.log(rows, "this is rows");
+
+    return rows[0];
+  });
+}
+
