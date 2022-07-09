@@ -224,7 +224,7 @@ describe('Testing for News app', () => {
           })
         });
       });
-      
+
       test("200: check comment_count is the total count of all the comments with this article_id", () => {
         return request(app)
           .get(`/api/articles/3`)
@@ -278,7 +278,11 @@ describe('Testing for News app', () => {
           expect(body.msg).toBe('Invalid Path');
       });
     });
-  });      
+  });   
+   // Ticket 9 Ends
+   
+   
+   // Ticket 10 Starts
 
 
 });
