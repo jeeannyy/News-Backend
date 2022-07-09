@@ -1,4 +1,7 @@
-const db = require("../db/index");
+const db = require("../db/connection");
+
+
+
 
 exports.fetchTopics = () => {
     return db
