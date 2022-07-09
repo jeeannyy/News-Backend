@@ -10,6 +10,22 @@ exports.fetchTopics = () => {
       })
 };
 
+exports.fetchArticles = () => {
+  return db
+    .query(
+      `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, 
+      COUNT(comments.article_id) AS comment_count 
+      FROM articles 
+      LEFT JOIN comments 
+      ON articles.article_id = comments.article_id
+      GROUP BY articles.article_id
+      ORDER BY created_at DESC;`
+    )
+    .then((result) => {
+      return result.rows;   
+    })
+};
+
 
 exports.selectArticleById = (article_id) => {
   return db
@@ -52,10 +68,10 @@ exports.fetchUsers = () => {
         `SELECT * FROM users;`
       )
       .then((result) => {
-        console.log(result);
         return result.rows;
       })
 } 
+
 
 exports.selectCommentsById = (article_id) => {
   return db
@@ -64,7 +80,6 @@ exports.selectCommentsById = (article_id) => {
     ,[article_id]
   )
   .then((results) => {
-    // console.log(results.rows, "this is result rows");
     return results.rows;
   });
 

@@ -144,7 +144,7 @@ describe('Testing for News app', () => {
         });
       });
   });
-  
+
     test("404 for invalid paths", () => {
       return request(app)
         .get("/api/userss")
@@ -154,12 +154,6 @@ describe('Testing for News app', () => {
           });
         });
       });
-
-
- // **FEATURE REQUEST**
-  // An article response object should also now include:
-
-  // -`comment_count` which is the total count of all the comments with this article_id - you should make use of queries to the database in order to achieve this.
 
   describe("7. GET /api/articles/:article_id (comment count)", () => {
     test("check an article object has comment_count property", () => {
@@ -196,7 +190,47 @@ describe('Testing for News app', () => {
    
   });
 
-// Ticket 9 Starts
+  //Ticket 8
+  describe("8. GET /api/articles", () => {
+    // test("200: check an article object has all property", () => {
+    //   return request(app)
+    //     .get(`/api/articles`)
+    //     .expect(200)
+    //     .then(({ body: { articles } }) => {
+    //       expect(articles).toHaveLength(12);
+    //       articles.forEach((article) => {
+    //         expect(article).toHaveProperty("created_at");
+    //         expect(article).toHaveProperty("title");
+    //         expect(article).toHaveProperty("votes");
+    //         expect(article).toHaveProperty("article_id");
+    //         expect(article).toHaveProperty("topic");
+    //         expect(article).toHaveProperty("author");
+    //         expect(article).toHaveProperty("comment_count");
+
+    //       })
+    //     });
+    // });
+    test("200: check comment_count is the total count of all the comments with this article_id", () => {
+      return request(app)
+        .get(`/api/articles/3`)
+        .expect(200)
+        .then(({body:{ article }}) => {
+          expect(article.comment_count).toEqual(2);
+        });
+    });
+
+        // test("200: check articles are sorted by date in descending order", () => {
+        //   return request(app)
+        //     .get(`/api/articles`)
+        //     .expect(200)
+        //     .then(({ body: { articles } }) => {
+        //       expect(articles).toBeSortedBy("created_at", { descending: true }
+        //       );
+        //     });
+        //   });    
+    });
+
+    // Ticket 9 Starts
    describe("9. GET /api/articles/:article_id/comments", () => {
     test("check an article object has 5 property", () => {
       return request(app)
@@ -232,6 +266,10 @@ describe('Testing for News app', () => {
    
   });
 
-});
+
+    
+   
+  });
+
 
 });

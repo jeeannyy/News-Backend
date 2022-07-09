@@ -1,5 +1,5 @@
 const express = require("express");
-const { getTopics, getArticleById, getUsers, patchVoteById, getCommentsById } = require("./controllers/controller");
+const { getTopics, getArticles, getArticleById, getUsers, patchVoteById, getCommentsById } = require("./controllers/controller");
 const { handleInvalidPaths, handleCustomErrors, handlePSQLErrors, handle500Errors } = require("./controllers/error_handling.controller");
 
 const app = express();
@@ -8,6 +8,7 @@ app.use(express.json());
 
 
 app.get('/api/topics', getTopics);
+app.get('/api/articles', getArticles);
 
 app.get('/api/articles/:article_id', getArticleById);
 app.patch('/api/articles/:article_id', patchVoteById);
