@@ -1,9 +1,8 @@
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data");
-const db = require("../db");
+const db = require("../db/connection");
 const request = require("supertest");
 const app = require("../app");
-const users = require('../db/data/test-data/users');
 
 beforeEach(() => {
   return seed(testData);
@@ -145,7 +144,7 @@ describe('Testing for News app', () => {
         });
       });
   });
-  
+
     test("404 for invalid paths", () => {
       return request(app)
         .get("/api/userss")
@@ -155,12 +154,6 @@ describe('Testing for News app', () => {
           });
         });
       });
-
-
- // **FEATURE REQUEST**
-  // An article response object should also now include:
-
-  // -`comment_count` which is the total count of all the comments with this article_id - you should make use of queries to the database in order to achieve this.
 
   describe("7. GET /api/articles/:article_id (comment count)", () => {
     test("check an article object has comment_count property", () => {
@@ -191,7 +184,7 @@ describe('Testing for News app', () => {
       .get('/api/articles/99999')
       .expect(404)
       .then(({ body }) => {
-          expect(body.msg).toBe('Page not found');
+          expect(body.msg).toBe('Invalid Path');
       });
     });
    
@@ -203,12 +196,15 @@ describe('Testing for News app', () => {
       return request(app)
         .get(`/api/articles/1/comments`)
         .expect(200)
-        .then(({body:{ article }}) => {
+        .then(({ body: { articles } } ) => {
+          // expect(articles).toHaveLength(10);
+          articles.forEach((article) => {
           expect(article).toHaveProperty("comment_id");
           expect(article).toHaveProperty("votes");
           expect(article).toHaveProperty("created_at");
           expect(article).toHaveProperty("author");
           expect(article).toHaveProperty("body");
+         });
         });
     });
     it("400: bad request response for invalid path", () => {
@@ -224,12 +220,56 @@ describe('Testing for News app', () => {
       .get('/api/articles/99999')
       .expect(404)
       .then(({ body }) => {
-          expect(body.msg).toBe('Page not found');
+          expect(body.msg).toBe('Invalid Path');
       });
     });
    
   });
 
-});
+  //Ticket 8
+  describe("8. GET /api/articles", () => {
+    test("200: check an article object has all property", () => {
+      return request(app)
+        .get(`/api/articles`)
+        .expect(200)
+        .then(({body:{ articles }}) => {
+          console.log(articles);
+          expect(articles).toHaveLength(12);
+          articles.forEach((article) => {
+            expect(article).toHaveProperty("created_at");
+            expect(article).toHaveProperty("title");
+            expect(article).toHaveProperty("votes");
+            expect(article).toHaveProperty("article_id");
+            expect(article).toHaveProperty("topic");
+            expect(article).toHaveProperty("author");
+            expect(article).toHaveProperty("comment_count");
+
+          })
+        });
+    });
+    test("200: check comment_count is the total count of all the comments with this article_id", () => {
+      return request(app)
+        .get(`/api/articles/3`)
+        .expect(200)
+        .then(({body:{ article }}) => {
+          expect(article.comment_count).toEqual(2);
+        });
+    });
+
+        test("200: check articles are sorted by date in descending order", () => {
+          return request(app)
+            .get(`/api/articles`)
+            .expect(200)
+            .then(({ body: { articles } }) => {
+              expect(articles).toBeSortedBy("created_at", { descending: true }
+              );
+            });
+          });    
+    });
+
+    
+   
+  });
+
 
 });
