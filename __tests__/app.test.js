@@ -236,7 +236,7 @@ describe('Testing for News app', () => {
 
         test("200: check articles are sorted by date in descending order", () => {
           return request(app)
-            .get(`/api/articles`)
+            .get(`/api/articles?order=desc`)
             .expect(200)
             .then(({ body: { articles } }) => {
               expect(articles).toBeSortedBy("created_at", { descending: true });
@@ -283,59 +283,43 @@ describe('Testing for News app', () => {
    
    
    // Ticket 10 Starts
-//    Request body accepts:
-// - an object with the following properties:
-//   - `username`
-//   - `body`
-
-// Responds with:
-// - the posted comment
-
    describe("10. POST /api/articles/:article_id/comments", () => {
-    // test('201: responds with newly added to the database', () => {
+    // test.only('201: responds with new comment is added to the database', () => {
+    //   const ARTICLE_ID = 1;
     //   const newComment = {
-    //     username: 'Jeeanny',
-    //     body: 'Call me Jeeann',
+    //     author: "butter_bridge", 
+    //     body: "I like it"
     //   };
     //   return request(app)
-    //     .post(`/api/articles/1/comments`)
+    //     .post(`/api/articles/${ARTICLE_ID}/comments`)
     //     .send(newComment)
     //     .expect(201)
     //     .then(({ body } ) => {
-    //       expect(body.article).toEqual({
-    //         article_id: 1,
-    //         ...newComment,
-    //       });
+    //         expect(body.comment).toEqual({
+    //           ...newComment,
+    //           votes: 16,
+    //           article_id: ARTICLE_ID,
+    //           created_at: 1586179020000,
+    //         })
     //      });
     //     });
-
-      test("400: bad request response for invalid path", () => {
+    test("404: bad request response for the invaild ID", () => {
+          const newComment = {
+            username: "icellusedkars", 
+            body: "I like it"
+          };
           return request(app)
-          .get('/api/articles/notAnID/comments')
-          .expect(400)
+          .post('/api/articles/1/potato')
+          .expect(404)
           .then(({ body }) => {
-              expect(body.msg).toBe("Invalid input");
+              expect(body.msg).toBe('Invalid Path');
           });
         });
-    // test("404: bad request response for the invaild ID", () => {
-    //       return request(app)
-    //       .get('/api/articles/99999/comments')
-    //       .expect(404)
-    //       .then(({ body }) => {
-    //           expect(body.msg).toBe('Invalid Path');
-    //       });
-    //     });
       
     });
 
 
     //Ticket 11
-// The end point should also accept the following queries:
-
-// - `sort_by`, which sorts the articles by any valid column (defaults to date)
-// - `order`, which can be set to `asc` or `desc` for ascending or descending (defaults to descending)
-// - `topic`, which filters the articles by the topic value specified in the query
-
     describe("11. GET /api/articles (queries)", () => {
       test('200: return all articles', () => {
         return request(app)
@@ -344,7 +328,6 @@ describe('Testing for News app', () => {
           .then(({ body : { articles } }) => {
             expect(articles).toHaveLength(12);
             articles.forEach((article) => {
-              // console.log(article, "this is article");
             expect(article).toHaveProperty('title');
             expect(article).toHaveProperty('topic');
             expect(article).toHaveProperty('author');
@@ -396,7 +379,7 @@ describe('Testing for News app', () => {
               });
           }); 
 
-          test.only("200: to be ordered desc number", () => {
+          test("200: to be ordered desc number", () => {
             return request(app)
               .get("/api/articles?order=desc")
               .expect(200)
@@ -430,6 +413,32 @@ describe('Testing for News app', () => {
                 expect(msg).toBe("Invalid Path");
               });
           });
-        
       });
-  });  
+
+
+//Ticket 12 Starts  
+      describe('12. DELETE /api/comments/:comment_id', () => {
+        test("204: delete comment from database", () => {
+          return request(app)
+          .delete("/api/comments/1")
+          .expect(204)
+        });
+
+        test("400: bad request response for invalid ID", () => {
+          return request(app)
+          .delete('/api/comments/notAnID')
+          .expect(400)
+          .then(({ body }) => {
+              expect(body.msg).toBe("Invalid input");
+          });
+        });
+        test("404: ID does not exist", () => {
+          return request(app)
+          .delete("/api/comments/99999")
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe('Invalid Path');
+          });
+        });
+      });
+    });
