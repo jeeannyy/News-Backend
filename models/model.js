@@ -133,9 +133,9 @@ exports.insertCommentsById = (newComment, article_id) => {
   const { author, body} = newComment;
   return db
   .query(
-    `INSERT INTO comments (author, body, article_id) 
-    VALUES($1, $2, $3)
-    RETURNING *;`
+    `INSERT INTO comments (votes, author, body, article_id) 
+    VALUES(0, $1, $2, $3)
+    RETURNING comment_id, votes, created_at, author, body;`
     ,[author, body, article_id]
   )
   .then(({ rows }) => {
