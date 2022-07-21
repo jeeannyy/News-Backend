@@ -35,7 +35,7 @@ exports.fetchArticles = (topic, sort_by = "created_at", order="asc") => {
         FROM articles 
         LEFT JOIN comments 
         ON articles.article_id = comments.article_id
-        WHERE articles.topic
+        WHERE articles.topic = $1
         GROUP BY articles.article_id
         ORDER BY ${sort_by} ${order};`,
         [topic]
