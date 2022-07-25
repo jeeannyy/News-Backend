@@ -4,6 +4,7 @@ const { handleInvalidPaths, handleCustomErrors, handlePSQLErrors, handle500Error
 const cors = require('cors');
 const app = express();
 
+
 app.use(cors());
 app.use(express.json());
 // should be on top!!!!!!!
