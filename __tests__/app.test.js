@@ -278,31 +278,31 @@ describe('Testing for News app', () => {
           expect(body.msg).toBe('Invalid Path');
       });
     });
-  });   
-   // Ticket 9 Ends
-   
+  });      
    
    // Ticket 10 Starts
    describe("10. POST /api/articles/:article_id/comments", () => {
-    // test.only('201: responds with new comment is added to the database', () => {
-    //   const ARTICLE_ID = 1;
-    //   const newComment = {
-    //     author: "butter_bridge", 
-    //     body: "I like it"
-    //   };
-    //   return request(app)
-    //     .post(`/api/articles/${ARTICLE_ID}/comments`)
-    //     .send(newComment)
-    //     .expect(201)
-    //     .then(({ body } ) => {
-    //         expect(body.comment).toEqual({
-    //           ...newComment,
-    //           votes: 16,
-    //           article_id: ARTICLE_ID,
-    //           created_at: 1586179020000,
-    //         })
-    //      });
-    //     });
+    test.only('201: return the new comment object that has been added to the comments table', () => {
+      const newComment = {
+        username: "butter_bridge",
+        body: "Agricola is a detailed, strategic, and thoroughly engaging euro-style game about indirect competitive farming.",
+      };
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send(newComment)
+        .expect(201)
+        .then(({ body: { comment } }) => {
+          console.log(comment);
+          expect(comment).toMatchObject({
+            article_id: 1,
+            comment_id:expect.any(Number),
+            votes: 0,
+            created_at: expect.any(String),
+            author: "butter_bridge",
+            body: "Agricola is a detailed, strategic, and thoroughly engaging euro-style game about indirect competitive farming."
+          });
+        });
+    });
     test("404: bad request response for the invaild ID", () => {
           const newComment = {
             username: "icellusedkars", 

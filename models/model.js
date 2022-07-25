@@ -129,19 +129,17 @@ exports.selectCommentsById = (article_id) => {
 };
 
 
-exports.insertCommentsById = (newComment, article_id) => {
-  const { author, body} = newComment;
+exports.insertCommentsById = (article_id, username, body) => {
   return db
   .query(
-    `INSERT INTO comments (votes, author, body, article_id) 
-    VALUES(0, $1, $2, $3)
-    RETURNING comment_id, votes, created_at, author, body;`
-    ,[author, body, article_id]
+    "INSERT INTO comments (votes, author, body, article_id) VALUES (0, $1, $2, $3) RETURNING *;",
+    [username, body, article_id]
   )
   .then(({ rows }) => {
-    console.log(rows, "this is rows");
-    return rows;
-  });
+    // console.log(rows, "this is rows");
+    return rows[0];
+  })
+  .catch((error)=>{console.log(error)});
 }
 
 
