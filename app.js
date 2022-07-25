@@ -1,10 +1,14 @@
 const express = require("express");
 const { getTopics, getArticles, getArticleById, getUsers, patchVoteById, getCommentsById, postCommentsById, deleteCommentsById } = require("./controllers/controller");
 const { handleInvalidPaths, handleCustomErrors, handlePSQLErrors, handle500Errors } = require("./controllers/error_handling.controller");
-
+const cors = require('cors');
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 // should be on top!!!!!!!
+
+
 
 
 app.get('/api/topics', getTopics);
