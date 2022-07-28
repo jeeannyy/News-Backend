@@ -15,7 +15,7 @@ exports.fetchTopics = () => {
 
 exports.fetchArticles = (topic, sort_by = "created_at", order="asc") => {
   const validSortOptions = 
-  ['title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_id'];
+  ['title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_id', 'comment_count'];
 
     if (!validSortOptions.includes(sort_by)) {
     return Promise.reject(
