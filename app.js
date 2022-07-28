@@ -3,11 +3,12 @@ const { getTopics, getArticles, getArticleById, getUsers, patchVoteById, getComm
 const { handleInvalidPaths, handleCustomErrors, handlePSQLErrors, handle500Errors } = require("./controllers/error_handling.controller");
 const cors = require('cors');
 const app = express();
-
+const bodyParser = require('body-parser');
 
 app.use(cors());
 app.use(express.json());
-// should be on top!!!!!!!
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 
 
